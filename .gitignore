@@ -1,6 +1,6 @@
 .DS_Store
 /node_modules
-/documentation# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+/documentation
 
 # dependencies
 /node_modules
