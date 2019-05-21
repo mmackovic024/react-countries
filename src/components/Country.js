@@ -5,7 +5,7 @@ export default function Country(props) {
   const { flag, name, population, region, capital } = props.country;
   return (
     <>
-      <Card style={{ height: '400px' }}>
+      <Card style={{ height: '400px', maxWidth: '300px', margin: 'auto' }}>
         <CardMedia image={flag} style={{ width: '100%', height: '200px' }} />
         <CardContent>
           <Typography variant="h5" gutterBottom>
