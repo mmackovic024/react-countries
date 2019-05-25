@@ -67,7 +67,7 @@ export default function CountryDetails(props) {
                   Top level domain: {topLevelDomain}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  Currencies: {currencies && currencies.map(b => b.name)}
+                  Currencies: {currencies && currencies.map(b => `${b.name}, `)}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
                   Languages: {languages && languages.map(l => `${l.name}, `)}
@@ -78,6 +78,7 @@ export default function CountryDetails(props) {
                 {borders &&
                   borders.map(b => (
                     <Button
+                      key={b}
                       variant="contained"
                       color="primary"
                       style={{ margin: '3px' }}

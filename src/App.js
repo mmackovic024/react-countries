@@ -20,7 +20,7 @@ function App() {
     <BrowserRouter>
       <MuiThemeProvider theme={light ? themeLight : themeDark}>
         <CssBaseline>
-          <Container style={{ paddingTop: '7.5rem' }}>
+          <Container style={{ paddingTop: '5.5rem' }}>
             <Navbar theme={modeChange} isLight={light} />
             <Route
               exact

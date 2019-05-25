@@ -12,9 +12,11 @@ export default function Country(props) {
   const { flag, name, population, region, capital, alpha3Code } = props.country;
   return (
     <>
-      <CardActionArea>
+      <CardActionArea
+        style={{ height: '380px', maxWidth: '300px', margin: 'auto' }}
+      >
         <Link to={`/country/${alpha3Code}`} style={{ textDecoration: 'none' }}>
-          <Card style={{ height: '380px', maxWidth: '300px', margin: 'auto' }}>
+          <Card style={{ height: '380px' }}>
             <CardMedia
               component="img"
               image={flag}
