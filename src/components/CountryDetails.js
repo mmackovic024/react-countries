@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import useData from './useData';
 import { Button, Container, Grid, Typography } from '@material-ui/core';
 
 export default function CountryDetails(props) {
-  const details = useData(
-    `https://restcountries.eu/rest/v2/alpha/${props.match.params.code}`
+  const details = props.data.find(
+    country => country.alpha3Code === props.match.params.code
   );
+
   const {
     name,
     flag,
@@ -21,9 +21,19 @@ export default function CountryDetails(props) {
     borders
   } = details;
 
+  const borderCountries = borders.map(border =>
+    props.data.reduce((acc, cur) => {
+      cur.alpha3Code === border &&
+        Object.assign(acc, { code: cur.alpha3Code, name: cur.name });
+      return acc;
+    }, {})
+  );
+
+  React.useEffect(() => window.scrollTo(0, 0));
+
   return (
     <>
-      <Container style={{ paddingTop: '2rem' }}>
+      <Container>
         <Button
           onClick={props.history.goBack}
           variant="contained"
@@ -38,59 +48,98 @@ export default function CountryDetails(props) {
           <Grid item sm={12} md={6}>
             <Grid container spacing={4} style={{ paddingTop: '2rem' }}>
               <Grid item xs={12}>
-                <Typography variant="h4">
-                  <b>{name}</b>
-                </Typography>
+                <Typography variant="h4">{name}</Typography>
               </Grid>
               <Grid item sm={12} md={6}>
-                <Typography variant="body1" gutterBottom>
-                  <b>Native name: </b> {nativeName}
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Native name:{' '}
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                  <b>Population: </b>
+                <Typography variant="body1" display="inline" gutterBottom>
+                  {nativeName}
+                </Typography>
+                <br />
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Population:{' '}
+                </Typography>
+                <Typography variant="body1" display="inline" gutterBottom>
                   {new Intl.NumberFormat('en-US', { useGrouping: true }).format(
                     population
                   )}
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                  <b>Region: </b> {region}
+                <br />
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Region:{' '}
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                  <b>Subregion: </b> {subregion}
+                <Typography variant="body1" display="inline" gutterBottom>
+                  {region}
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                  <b>Capital: </b> {capital}
+                <br />
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Subregion:{' '}
                 </Typography>
+                <Typography variant="body1" display="inline" gutterBottom>
+                  {subregion}
+                </Typography>
+                <br />
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Capital:{' '}
+                </Typography>
+                <Typography variant="body1" display="inline" gutterBottom>
+                  {capital}
+                </Typography>
+                <br />
               </Grid>
               <Grid item sm={12} md={6}>
-                <Typography variant="body1" gutterBottom>
-                  Top level domain: {topLevelDomain}
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Top level domain:{' '}
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Currencies: {currencies && currencies.map(b => `${b.name}, `)}
+                <Typography variant="body1" display="inline" gutterBottom>
+                  {topLevelDomain}
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Languages: {languages && languages.map(l => `${l.name}, `)}
+                <br />
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Currencies:{' '}
                 </Typography>
+                <Typography variant="body1" display="inline" gutterBottom>
+                  {currencies &&
+                    currencies.map(
+                      (curr, index) =>
+                        curr.name +
+                        (index === currencies.length - 1 ? '' : ', ')
+                    )}
+                </Typography>
+                <br />
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Languages:{' '}
+                </Typography>
+                <Typography variant="body1" display="inline" gutterBottom>
+                  {languages &&
+                    languages.map(
+                      (lang, index) =>
+                        lang.name + (index === languages.length - 1 ? '' : ', ')
+                    )}
+                </Typography>
+                <br />
               </Grid>
               <Grid item xs={12}>
-                Border countries:{' '}
-                {borders &&
-                  borders.map(b => (
-                    <Button
-                      key={b}
-                      variant="contained"
-                      color="primary"
-                      style={{ margin: '3px' }}
+                <Typography variant="subtitle1" display="inline" gutterBottom>
+                  Border countries:{' '}
+                </Typography>
+                {borderCountries.map(({ code, name }) => (
+                  <Button
+                    key={code}
+                    variant="contained"
+                    color="primary"
+                    style={{ margin: '3px' }}
+                  >
+                    <Link
+                      to={`/country/${code}`}
+                      style={{ textDecoration: 'none', color: 'inherit' }}
                     >
-                      <Link
-                        to={`/country/${b}`}
-                        style={{ textDecoration: 'none', color: 'inherit' }}
-                      >
-                        {b}
-                      </Link>
-                    </Button>
-                  ))}
+                      {name}
+                    </Link>
+                  </Button>
+                ))}
               </Grid>
             </Grid>
           </Grid>

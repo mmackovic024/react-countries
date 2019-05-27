@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Grid,
   FormControl,
@@ -10,44 +10,55 @@ import {
   Fab
 } from '@material-ui/core';
 import { Search, KeyboardArrowUp } from '@material-ui/icons';
+import { withStyles } from '@material-ui/styles';
 import Country from './Country';
 
-const scrollTop = () => {
-  window.scrollTo(0, 0);
-};
+const styles = theme => ({
+  form: {
+    display: 'flex',
+    margin: '1rem 0 2rem',
+    color: 'inherit',
+    flexFlow: 'row wrap',
+    justifyContent: 'space-between',
+    alignContent: 'space-between'
+  },
+  textField: {
+    width: '23rem',
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.primary.main,
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: '2rem'
+    }
+  },
+  select: {
+    width: '10rem',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.text.primary,
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: '1rem'
+    }
+  },
+  fab: {
+    position: 'fixed',
+    bottom: '1rem',
+    right: '1rem'
+  }
+});
 
-export default function CountriesList(props) {
-  const [currentRegion, setCurrentRegion] = React.useState('All');
-  const [searchString, setSearchString] = React.useState('');
-  const { data } = props;
-  const regions = data
-    .map(country => country.region)
-    .reduce((regions, region) => {
-      if (regions.indexOf(region) === -1) {
-        region !== '' && regions.push(region);
-      }
-      return regions;
-    }, []);
+function CountriesList(props) {
+  const [currentRegion, setCurrentRegion] = useState('All');
+  const [searchString, setSearchString] = useState('');
+  const { regions, data, classes } = props;
 
   return (
     <>
-      <FormControl
-        variant="outlined"
-        style={{
-          display: 'flex',
-          margin: '1rem 0 2rem',
-          color: 'inherit',
-          flexFlow: 'row wrap',
-          justifyContent: 'space-between',
-          alignContent: 'space-between'
-        }}
-      >
+      <FormControl variant="outlined" className={classes.form}>
         <TextField
           id="outlined-search"
           placeholder="Search for a country..."
           type="search"
           onChange={e => setSearchString(e.target.value)}
-          // className={classes.textField}
+          className={classes.textField}
           variant="outlined"
           InputProps={{
             startAdornment: (
@@ -56,27 +67,21 @@ export default function CountriesList(props) {
               </InputAdornment>
             )
           }}
-          style={{ width: '25rem', color: 'inherit' }}
         />
         <Select
           value={currentRegion}
           placeholder="Filter by Region"
           onChange={e => setCurrentRegion(e.target.value)}
-          style={{
-            width: '10rem',
-            color: 'inherit'
-          }}
+          className={classes.select}
           input={<OutlinedInput name="region" id="outlined-region" />}
         >
-          <MenuItem disabled value="All">
-            Filter by Region
-          </MenuItem>
-          <MenuItem value="All">All</MenuItem>
-          {regions.map(region => (
-            <MenuItem key={region} value={region}>
-              {region}
-            </MenuItem>
-          ))}
+          <MenuItem value="All">Filter by Region</MenuItem>
+          {regions &&
+            regions.map(region => (
+              <MenuItem key={region} value={region}>
+                {region}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <Grid container spacing={8}>
@@ -103,13 +108,9 @@ export default function CountriesList(props) {
               </Grid>
             ))}
         <Fab
-          onClick={scrollTop}
+          onClick={() => window.scrollTo(0, 0)}
           color="primary"
-          style={{
-            position: 'fixed',
-            bottom: '1rem',
-            right: '1rem'
-          }}
+          className={classes.fab}
         >
           <KeyboardArrowUp />
         </Fab>
@@ -117,3 +118,5 @@ export default function CountriesList(props) {
     </>
   );
 }
+
+export default withStyles(styles)(CountriesList);

@@ -1,12 +1,32 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
-export const themeLight = createMuiTheme({
-  typography: {
-    fontFamily: 'Nunito Sans',
-    button: {
-      textTransform: 'none'
-    }
+const typography = {
+  fontFamily: 'Nunito Sans',
+  button: {
+    textTransform: 'none'
   },
+  h4: {
+    fontWeight: 800,
+    fontSize: '1.85rem'
+  },
+  h5: {
+    fontWeight: 800,
+    fontSize: '1.25rem'
+  },
+  h6: {
+    fontWeight: 600,
+    fontSize: '1rem'
+  },
+  subtitle1: {
+    fontWeight: 600
+  },
+  body1: {
+    fontWeight: 300
+  }
+};
+
+export const themeLight = createMuiTheme({
+  typography,
   palette: {
     primary: {
       main: 'hsl(0, 0%, 100%)'
@@ -25,12 +45,7 @@ export const themeLight = createMuiTheme({
 });
 
 export const themeDark = createMuiTheme({
-  typography: {
-    fontFamily: 'Nunito Sans',
-    button: {
-      textTransform: 'none'
-    }
-  },
+  typography,
   palette: {
     primary: {
       main: 'hsl(209, 23%, 22%)'
@@ -44,6 +59,11 @@ export const themeDark = createMuiTheme({
     background: {
       paper: 'hsl(209, 23%, 22%)',
       default: 'hsl(207, 26%, 17%)'
+    }
+  },
+  overrides: {
+    MuiSelect: {
+      icon: { color: 'hsl(0, 0%, 100%)' }
     }
   }
 });

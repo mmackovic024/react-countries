@@ -8,7 +8,7 @@ export default function Navbar(props) {
       <Toolbar>
         <Typography variant="h5" color="inherit">
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <b>Where in the world?</b>
+            Where in the world?
           </Link>
         </Typography>
         <Button onClick={props.theme} style={{ marginLeft: 'auto' }}>

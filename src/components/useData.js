@@ -4,10 +4,19 @@ export default function useData(url) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    let ignore = false;
+
     fetch(url)
       .then(res => res.json())
-      .then(data => setData(data));
+      .then(data => {
+        if (!ignore) setData(data);
+      });
+    return () => {
+      ignore = true;
+    };
   }, [url]);
+
+  console.log('Fetched data from ' + url);
 
   return data;
 }

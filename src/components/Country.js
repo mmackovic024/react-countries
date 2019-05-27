@@ -24,20 +24,31 @@ export default function Country(props) {
             />
             <CardContent>
               <Typography variant="h5" gutterBottom>
-                <b>{name}</b>
+                {name}
               </Typography>
-              <Typography variant="body1">
-                <b>Population:</b>{' '}
+              <Typography variant="subtitle1" display="inline">
+                Population:{' '}
+              </Typography>
+              <Typography variant="body1" display="inline">
                 {new Intl.NumberFormat('en-US', { useGrouping: true }).format(
                   population
                 )}
               </Typography>
-              <Typography variant="body1">
-                <b>Region:</b> {region}
+              <br />
+              <Typography variant="subtitle1" display="inline">
+                Region:{' '}
               </Typography>
-              <Typography variant="body1">
-                <b>Capital:</b> {capital}
+              <Typography variant="body1" display="inline">
+                {region}
               </Typography>
+              <br />
+              <Typography variant="subtitle1" display="inline">
+                Capital:{' '}
+              </Typography>
+              <Typography variant="body1" display="inline">
+                {capital}
+              </Typography>
+              <br />
             </CardContent>
           </Card>
         </Link>
