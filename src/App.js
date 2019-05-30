@@ -8,37 +8,26 @@ import CountryDetails from './components/CountryDetails';
 import Page404 from './components/Page404';
 import { dark, light } from './components/themes';
 import useTheme from './components/useTheme';
+import useData from './components/useData';
 
 function App() {
   const [theme, toggleTheme] = useTheme();
-  const [data, setData] = useState([]);
+  const data = useData('https://restcountries.eu/rest/v2/all');
   const [regions, setRegions] = useState([]);
 
   useEffect(() => {
-    let ignore = false;
-
-    fetch('https://restcountries.eu/rest/v2/all')
-      .then(res => res.json())
-      .then(data => {
-        if (!ignore) {
-          setData(data);
-          setRegions(
-            data
-              .reduce((regions, country) => {
-                if (regions.indexOf(country.region) === -1) {
-                  country.region !== '' && regions.push(country.region);
-                }
-                return regions;
-              }, [])
-              .sort()
-          );
-        }
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+    setRegions(
+      data
+        .reduce((regions, country) => {
+          if (regions.indexOf(country.region) === -1) {
+            country.region !== '' && regions.push(country.region);
+          }
+          return regions;
+        }, [])
+        .sort()
+    );
+    return;
+  }, [data]);
 
   return (
     <BrowserRouter>
@@ -57,7 +46,15 @@ function App() {
               <Route
                 exact
                 path="/country/:code"
-                render={props => <CountryDetails {...props} data={data} />}
+                render={props => (
+                  <CountryDetails
+                    {...props}
+                    details={data.find(
+                      country => country.alpha3Code === props.match.params.code
+                    )}
+                    data={data}
+                  />
+                )}
               />
               <Route component={Page404} />
             </Switch>

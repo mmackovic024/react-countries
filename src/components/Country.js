@@ -5,9 +5,11 @@ import {
   CardActionArea,
   CardMedia,
   CardContent,
-  Typography
+  Typography,
+  Grid
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
+import Item from './Item';
 
 const styles = theme => ({
   cardAction: {
@@ -35,45 +37,33 @@ function Country(props) {
 
   return (
     <>
-      <CardActionArea className={classes.cardAction}>
-        <Link to={`/country/${alpha3Code}`} className={classes.link}>
-          <Card className={classes.card}>
-            <CardMedia
-              component="img"
-              image={flag}
-              className={classes.cardMedia}
-            />
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                {name}
-              </Typography>
-              <Typography variant="subtitle1" display="inline">
-                Population:{' '}
-              </Typography>
-              <Typography variant="body1" display="inline">
-                {new Intl.NumberFormat('en-US', { useGrouping: true }).format(
-                  population
-                )}
-              </Typography>
-              <br />
-              <Typography variant="subtitle1" display="inline">
-                Region:{' '}
-              </Typography>
-              <Typography variant="body1" display="inline">
-                {region}
-              </Typography>
-              <br />
-              <Typography variant="subtitle1" display="inline">
-                Capital:{' '}
-              </Typography>
-              <Typography variant="body1" display="inline">
-                {capital}
-              </Typography>
-              <br />
-            </CardContent>
-          </Card>
-        </Link>
-      </CardActionArea>
+      <Grid item lg={3} md={4} sm={6} xs={12}>
+        <CardActionArea className={classes.cardAction}>
+          <Link to={`/country/${alpha3Code}`} className={classes.link}>
+            <Card className={classes.card}>
+              <CardMedia
+                component="img"
+                image={flag}
+                className={classes.cardMedia}
+              />
+              <CardContent>
+                <Typography variant="h5" gutterBottom>
+                  {name}
+                </Typography>
+                <Item
+                  forpage="home"
+                  title="Population"
+                  value={new Intl.NumberFormat('en-US', {
+                    useGrouping: true
+                  }).format(population)}
+                />
+                <Item forpage="home" title="Region" value={region} />
+                <Item forpage="home" title="Capital" value={capital} />
+              </CardContent>
+            </Card>
+          </Link>
+        </CardActionArea>
+      </Grid>
     </>
   );
 }

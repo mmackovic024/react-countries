@@ -18,10 +18,20 @@ const typography = {
     fontSize: '1rem'
   },
   subtitle1: {
-    fontWeight: 600
+    fontWeight: 600,
+    fontSize: '1.15rem'
+  },
+  subtitle2: {
+    fontWeight: 600,
+    fontSize: '1rem'
   },
   body1: {
-    fontWeight: 300
+    fontWeight: 300,
+    fontSize: '1.15rem'
+  },
+  body2: {
+    fontWeight: 300,
+    fontSize: '1rem'
   }
 };
 

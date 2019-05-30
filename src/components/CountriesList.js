@@ -69,6 +69,16 @@ function CountriesList(props) {
     return () => window.removeEventListener('scroll', handleScroll);
   });
 
+  const searchAll = data.filter(country =>
+    country.name.toLowerCase().includes(searchString.toLowerCase())
+  );
+
+  const searchRegion = data.filter(
+    country =>
+      country.region === currentRegion &&
+      country.name.toLowerCase().includes(searchString.toLowerCase())
+  );
+
   return (
     <>
       <FormControl variant="outlined" className={classes.form}>
@@ -116,43 +126,13 @@ function CountriesList(props) {
       >
         <Grid container spacing={8}>
           {currentRegion === 'All' &&
-            data
-              .filter(country =>
-                country.name.toLowerCase().includes(searchString.toLowerCase())
-              )
-              .map(country => (
-                <Grid
-                  item
-                  key={country.alpha3Code}
-                  lg={3}
-                  md={4}
-                  sm={6}
-                  xs={12}
-                >
-                  <Country country={country} />
-                </Grid>
-              ))}
+            searchAll.map(country => (
+              <Country key={country.alpha3Code} country={country} />
+            ))}
           {currentRegion !== 'All' &&
-            data
-              .filter(
-                country =>
-                  country.region === currentRegion &&
-                  country.name
-                    .toLowerCase()
-                    .includes(searchString.toLowerCase())
-              )
-              .map(country => (
-                <Grid
-                  item
-                  key={country.alpha3Code}
-                  lg={3}
-                  md={4}
-                  sm={6}
-                  xs={12}
-                >
-                  <Country country={country} />
-                </Grid>
-              ))}
+            searchRegion.map(country => (
+              <Country key={country.alpha3Code} country={country} />
+            ))}
           <Fade in={scrolled}>
             <Fab
               onClick={() => window.scrollTo(0, 0)}
