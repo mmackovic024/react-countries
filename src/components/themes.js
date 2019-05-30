@@ -25,7 +25,7 @@ const typography = {
   }
 };
 
-export const themeLight = createMuiTheme({
+export const light = createMuiTheme({
   typography,
   palette: {
     primary: {
@@ -44,7 +44,7 @@ export const themeLight = createMuiTheme({
   }
 });
 
-export const themeDark = createMuiTheme({
+export const dark = createMuiTheme({
   typography,
   palette: {
     primary: {

@@ -7,20 +7,41 @@ import {
   CardContent,
   Typography
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
-export default function Country(props) {
-  const { flag, name, population, region, capital, alpha3Code } = props.country;
+const styles = theme => ({
+  cardAction: {
+    height: '380px',
+    maxWidth: '300px',
+    margin: 'auto'
+  },
+  link: {
+    textDecoration: 'none'
+  },
+  card: {
+    height: '380px'
+  },
+  cardMedia: {
+    width: '100%',
+    height: '175px'
+  }
+});
+
+function Country(props) {
+  const {
+    country: { flag, name, population, region, capital, alpha3Code },
+    classes
+  } = props;
+
   return (
     <>
-      <CardActionArea
-        style={{ height: '380px', maxWidth: '300px', margin: 'auto' }}
-      >
-        <Link to={`/country/${alpha3Code}`} style={{ textDecoration: 'none' }}>
-          <Card style={{ height: '380px' }}>
+      <CardActionArea className={classes.cardAction}>
+        <Link to={`/country/${alpha3Code}`} className={classes.link}>
+          <Card className={classes.card}>
             <CardMedia
               component="img"
               image={flag}
-              style={{ width: '100%', height: '175px' }}
+              className={classes.cardMedia}
             />
             <CardContent>
               <Typography variant="h5" gutterBottom>
@@ -56,3 +77,5 @@ export default function Country(props) {
     </>
   );
 }
+
+export default withStyles(styles)(Country);

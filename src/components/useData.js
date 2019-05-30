@@ -16,7 +16,5 @@ export default function useData(url) {
     };
   }, [url]);
 
-  console.log('Fetched data from ' + url);
-
   return data;
 }

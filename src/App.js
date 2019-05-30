@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Container, CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import Navbar from './components/Navbar';
 import CountriesList from './components/CountriesList';
 import CountryDetails from './components/CountryDetails';
-import { themeDark, themeLight } from './components/themes';
+import Page404 from './components/Page404';
+import { dark, light } from './components/themes';
+import useTheme from './components/useTheme';
 
 function App() {
-  const [light, setLight] = useState(true);
+  const [theme, toggleTheme] = useTheme();
   const [data, setData] = useState([]);
   const [regions, setRegions] = useState([]);
 
@@ -38,28 +40,27 @@ function App() {
     };
   }, []);
 
-  function modeChange() {
-    setLight(!light);
-  }
-
   return (
     <BrowserRouter>
-      <MuiThemeProvider theme={light ? themeLight : themeDark}>
+      <MuiThemeProvider theme={theme === 'light' ? light : dark}>
         <CssBaseline>
           <Container style={{ paddingTop: '5.5rem' }}>
-            <Navbar theme={modeChange} isLight={light} />
-            <Route
-              exact
-              path="/"
-              render={props => (
-                <CountriesList {...props} data={data} regions={regions} />
-              )}
-            />
-            <Route
-              exact
-              path="/country/:code"
-              render={props => <CountryDetails {...props} data={data} />}
-            />
+            <Navbar toggleTheme={toggleTheme} theme={theme} />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <CountriesList {...props} data={data} regions={regions} />
+                )}
+              />
+              <Route
+                exact
+                path="/country/:code"
+                render={props => <CountryDetails {...props} data={data} />}
+              />
+              <Route component={Page404} />
+            </Switch>
           </Container>
         </CssBaseline>
       </MuiThemeProvider>

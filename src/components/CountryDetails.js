@@ -1,11 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Container, Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import Page404 from './Page404';
 
-export default function CountryDetails(props) {
+const styles = () => ({
+  grid: { paddingTop: '2rem' },
+  button: { margin: '3px' },
+  link: { textDecoration: 'none', color: 'inherit' }
+});
+
+function CountryDetails(props) {
+  const { classes } = props;
+
   const details = props.data.find(
     country => country.alpha3Code === props.match.params.code
   );
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
+  if (!details) return <Page404 />;
 
   const {
     name,
@@ -29,8 +45,6 @@ export default function CountryDetails(props) {
     }, {})
   );
 
-  React.useEffect(() => window.scrollTo(0, 0));
-
   return (
     <>
       <Container>
@@ -41,12 +55,12 @@ export default function CountryDetails(props) {
         >
           ← Back
         </Button>
-        <Grid container spacing={5} style={{ paddingTop: '4.5rem' }}>
+        <Grid container spacing={5} className={classes.grid}>
           <Grid item sm={12} md={6}>
             <img src={flag} alt={`${name} flag`} width="95%" />
           </Grid>
           <Grid item sm={12} md={6}>
-            <Grid container spacing={4} style={{ paddingTop: '2rem' }}>
+            <Grid container spacing={4} className={classes.grid}>
               <Grid item xs={12}>
                 <Typography variant="h4">{name}</Typography>
               </Grid>
@@ -130,12 +144,9 @@ export default function CountryDetails(props) {
                     key={code}
                     variant="contained"
                     color="primary"
-                    style={{ margin: '3px' }}
+                    className={classes.button}
                   >
-                    <Link
-                      to={`/country/${code}`}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
+                    <Link to={`/country/${code}`} className={classes.link}>
                       {name}
                     </Link>
                   </Button>
@@ -148,3 +159,5 @@ export default function CountryDetails(props) {
     </>
   );
 }
+
+export default withStyles(styles)(CountryDetails);

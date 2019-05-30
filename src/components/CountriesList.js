@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import {
   Grid,
   FormControl,
@@ -7,11 +7,13 @@ import {
   MenuItem,
   TextField,
   InputAdornment,
-  Fab
+  Fab,
+  CircularProgress,
+  Fade
 } from '@material-ui/core';
 import { Search, KeyboardArrowUp } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
-import Country from './Country';
+const Country = React.lazy(() => import('./Country'));
 
 const styles = theme => ({
   form: {
@@ -42,13 +44,30 @@ const styles = theme => ({
     position: 'fixed',
     bottom: '1rem',
     right: '1rem'
+  },
+  progress: {
+    color: theme.palette.error.main,
+    position: 'relative',
+    left: '50%'
   }
 });
 
 function CountriesList(props) {
   const [currentRegion, setCurrentRegion] = useState('All');
   const [searchString, setSearchString] = useState('');
+  const [scrolled, setScrolled] = useState(false);
   const { regions, data, classes } = props;
+
+  function handleScroll() {
+    let winHeight = window.innerHeight,
+      winScroll = window.pageYOffset;
+    winScroll > winHeight / 4 ? setScrolled(true) : setScrolled(false);
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  });
 
   return (
     <>
@@ -84,37 +103,67 @@ function CountriesList(props) {
             ))}
         </Select>
       </FormControl>
-      <Grid container spacing={8}>
-        {currentRegion === 'All' &&
-          data
-            .filter(country =>
-              country.name.toLowerCase().includes(searchString.toLowerCase())
-            )
-            .map(country => (
-              <Grid item key={country.alpha3Code} lg={3} md={4} sm={6} xs={12}>
-                <Country country={country} />
-              </Grid>
-            ))}
-        {currentRegion !== 'All' &&
-          data
-            .filter(
-              country =>
-                country.region === currentRegion &&
+      <Suspense
+        fallback={
+          <CircularProgress
+            disableShrink
+            size={70}
+            thickness={4}
+            variant="indeterminate"
+            className={classes.progress}
+          />
+        }
+      >
+        <Grid container spacing={8}>
+          {currentRegion === 'All' &&
+            data
+              .filter(country =>
                 country.name.toLowerCase().includes(searchString.toLowerCase())
-            )
-            .map(country => (
-              <Grid item key={country.alpha3Code} lg={3} md={4} sm={6} xs={12}>
-                <Country country={country} />
-              </Grid>
-            ))}
-        <Fab
-          onClick={() => window.scrollTo(0, 0)}
-          color="primary"
-          className={classes.fab}
-        >
-          <KeyboardArrowUp />
-        </Fab>
-      </Grid>
+              )
+              .map(country => (
+                <Grid
+                  item
+                  key={country.alpha3Code}
+                  lg={3}
+                  md={4}
+                  sm={6}
+                  xs={12}
+                >
+                  <Country country={country} />
+                </Grid>
+              ))}
+          {currentRegion !== 'All' &&
+            data
+              .filter(
+                country =>
+                  country.region === currentRegion &&
+                  country.name
+                    .toLowerCase()
+                    .includes(searchString.toLowerCase())
+              )
+              .map(country => (
+                <Grid
+                  item
+                  key={country.alpha3Code}
+                  lg={3}
+                  md={4}
+                  sm={6}
+                  xs={12}
+                >
+                  <Country country={country} />
+                </Grid>
+              ))}
+          <Fade in={scrolled}>
+            <Fab
+              onClick={() => window.scrollTo(0, 0)}
+              color="primary"
+              className={classes.fab}
+            >
+              <KeyboardArrowUp />
+            </Fab>
+          </Fade>
+        </Grid>
+      </Suspense>
     </>
   );
 }
