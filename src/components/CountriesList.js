@@ -2,17 +2,15 @@ import React, { useState, Suspense } from 'react';
 import {
   Grid,
   FormControl,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  TextField,
-  InputAdornment,
   Fab,
   CircularProgress,
+  MenuItem,
   Fade
 } from '@material-ui/core';
-import { Search, KeyboardArrowUp } from '@material-ui/icons';
+import { KeyboardArrowUp } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
+import Searchbox from './Searchbox';
+import RegionsMenu from './RegionsMenu';
 const Country = React.lazy(() => import('./Country'));
 
 const styles = theme => ({
@@ -82,36 +80,22 @@ function CountriesList(props) {
   return (
     <>
       <FormControl variant="outlined" className={classes.form}>
-        <TextField
-          id="outlined-search"
-          placeholder="Search for a country..."
-          type="search"
+        <Searchbox
           onChange={e => setSearchString(e.target.value)}
           className={classes.textField}
-          variant="outlined"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            )
-          }}
         />
-        <Select
+        <RegionsMenu
           value={currentRegion}
-          placeholder="Filter by Region"
           onChange={e => setCurrentRegion(e.target.value)}
           className={classes.select}
-          input={<OutlinedInput name="region" id="outlined-region" />}
         >
-          <MenuItem value="All">Filter by Region</MenuItem>
           {regions &&
             regions.map(region => (
               <MenuItem key={region} value={region}>
                 {region}
               </MenuItem>
             ))}
-        </Select>
+        </RegionsMenu>
       </FormControl>
       <Suspense
         fallback={
