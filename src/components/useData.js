@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function useData(url) {
+export default url => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -17,4 +17,4 @@ export default function useData(url) {
   }, [url]);
 
   return data;
-}
+};
