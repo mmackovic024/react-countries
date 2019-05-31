@@ -14,6 +14,7 @@ function App() {
   const [theme, toggleTheme] = useTheme();
   const data = useData('https://restcountries.eu/rest/v2/all');
   const [regions, setRegions] = useState([]);
+  const [currentRegion, setCurrentRegion] = useState('All');
 
   useEffect(() => {
     setRegions(
@@ -40,7 +41,13 @@ function App() {
                 exact
                 path="/"
                 render={props => (
-                  <CountriesList {...props} data={data} regions={regions} />
+                  <CountriesList
+                    {...props}
+                    data={data}
+                    regions={regions}
+                    currentRegion={currentRegion}
+                    setCurrentRegion={setCurrentRegion}
+                  />
                 )}
               />
               <Route

@@ -1,43 +1,12 @@
 import React, { useState, Suspense } from 'react';
-import {
-  Grid,
-  FormControl,
-  Fab,
-  CircularProgress,
-  MenuItem,
-  Fade
-} from '@material-ui/core';
+import { Grid, Fab, CircularProgress, Fade } from '@material-ui/core';
 import { KeyboardArrowUp } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
-import Searchbox from './Searchbox';
-import RegionsMenu from './RegionsMenu';
+import Searchbar from './Searchbar';
 const Country = React.lazy(() => import('./Country'));
 
 const styles = theme => ({
-  form: {
-    display: 'flex',
-    margin: '1rem 0 2rem',
-    color: 'inherit',
-    flexFlow: 'row wrap',
-    justifyContent: 'space-between',
-    alignContent: 'space-between'
-  },
-  textField: {
-    width: '23rem',
-    color: theme.palette.text.primary,
-    backgroundColor: theme.palette.primary.main,
-    [theme.breakpoints.down('xs')]: {
-      marginBottom: '2rem'
-    }
-  },
-  select: {
-    width: '10rem',
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.text.primary,
-    [theme.breakpoints.down('xs')]: {
-      marginBottom: '1rem'
-    }
-  },
+  content: { paddingTop: '1rem' },
   fab: {
     position: 'fixed',
     bottom: '1rem',
@@ -51,10 +20,9 @@ const styles = theme => ({
 });
 
 function CountriesList(props) {
-  const [currentRegion, setCurrentRegion] = useState('All');
   const [searchString, setSearchString] = useState('');
   const [scrolled, setScrolled] = useState(false);
-  const { regions, data, classes } = props;
+  const { regions, data, classes, currentRegion, setCurrentRegion } = props;
 
   function handleScroll() {
     let winHeight = window.innerHeight,
@@ -79,24 +47,12 @@ function CountriesList(props) {
 
   return (
     <>
-      <FormControl variant="outlined" className={classes.form}>
-        <Searchbox
-          onChange={e => setSearchString(e.target.value)}
-          className={classes.textField}
-        />
-        <RegionsMenu
-          value={currentRegion}
-          onChange={e => setCurrentRegion(e.target.value)}
-          className={classes.select}
-        >
-          {regions &&
-            regions.map(region => (
-              <MenuItem key={region} value={region}>
-                {region}
-              </MenuItem>
-            ))}
-        </RegionsMenu>
-      </FormControl>
+      <Searchbar
+        setSearchString={setSearchString}
+        currentRegion={currentRegion}
+        setCurrentRegion={setCurrentRegion}
+        regions={regions}
+      />
       <Suspense
         fallback={
           <CircularProgress
@@ -108,7 +64,7 @@ function CountriesList(props) {
           />
         }
       >
-        <Grid container spacing={8}>
+        <Grid container spacing={8} className={classes.content}>
           {currentRegion === 'All' &&
             searchAll.map(country => (
               <Country key={country.alpha3Code} country={country} />
