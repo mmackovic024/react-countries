@@ -34,7 +34,7 @@ function App() {
   }, [data]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/react-countries">
       <MuiThemeProvider theme={theme === 'light' ? light : dark}>
         <CssBaseline>
           <Container style={{ paddingTop: '5.5rem' }}>
