@@ -39,12 +39,8 @@ function CountriesList(props) {
   }
 
   React.useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () =>
-      window.removeEventListener('scroll', handleScroll, {
-        capture: true,
-        passive: true
-      });
+    window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('scroll', handleScroll, true);
   });
 
   const searchAll = data.filter(country =>

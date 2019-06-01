@@ -1,3 +1,5 @@
+// Hook made by https://github.com/rwieruch
+
 import { useState, useEffect, useReducer } from 'react';
 import axios from 'axios';
 

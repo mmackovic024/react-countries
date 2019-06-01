@@ -12,6 +12,11 @@ import Page404 from './Page404';
 import Item from './Item';
 
 const styles = theme => ({
+  progress: {
+    color: theme.palette.error.main,
+    position: 'relative',
+    left: '50%'
+  },
   grid: { paddingTop: '2rem' },
   button: { margin: '3px' },
   link: { textDecoration: 'none', color: 'inherit' },
@@ -45,7 +50,7 @@ function CountryDetails(props) {
   } = details || {};
 
   const borderCountries =
-    [] ||
+    borders &&
     borders.map(code =>
       data.reduce((countries, currentCountry) => {
         currentCountry.alpha3Code === code &&
@@ -68,7 +73,8 @@ function CountryDetails(props) {
           className={classes.progress}
         />
       )}
-      {!isLoading && (
+      {!isLoading && !details && <Page404 />}
+      {!isLoading && details && (
         <Container>
           <Button
             onClick={props.history.goBack}
