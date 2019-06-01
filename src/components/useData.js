@@ -1,20 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
+import axios from 'axios';
 
-export default url => {
-  const [data, setData] = useState([]);
+const dataFetchReducer = (state, action) => {
+  switch (action.type) {
+    case 'FETCH_INIT':
+      return { ...state, isLoading: true, isError: false };
+    case 'FETCH_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: action.payload
+      };
+    case 'FETCH_FAILURE':
+      return {
+        ...state,
+        isLoading: false,
+        isError: true
+      };
+    default:
+      throw new Error();
+  }
+};
+
+export default function useData(initialUrl, initialData) {
+  const [url, setUrl] = useState(initialUrl);
+
+  const [state, dispatch] = useReducer(dataFetchReducer, {
+    isLoading: false,
+    isError: false,
+    data: initialData
+  });
 
   useEffect(() => {
-    let ignore = false;
+    let didCancel = false;
 
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        if (!ignore) setData(data);
-      });
+    const fetchData = async () => {
+      dispatch({ type: 'FETCH_INIT' });
+
+      try {
+        const result = await axios(url);
+
+        if (!didCancel) {
+          dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
+        }
+      } catch (error) {
+        if (!didCancel) {
+          dispatch({ type: 'FETCH_FAILURE' });
+        }
+      }
+    };
+
+    fetchData();
+
     return () => {
-      ignore = true;
+      didCancel = true;
     };
   }, [url]);
 
-  return data;
-};
+  return [state, setUrl];
+}
