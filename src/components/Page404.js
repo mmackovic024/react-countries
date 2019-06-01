@@ -6,11 +6,14 @@ export default function Page404() {
   return (
     <>
       <Typography variant="h4" gutterBottom align="center">
-        Sorry... Page not found :(
+        Sorry... Something went wrong :(
         <br />
+        Try again later
       </Typography>
       <Typography variant="h5" align="center">
-        <Link to="/">Back to Homepage</Link>
+        <Link to="/" style={{ color: 'inherit' }}>
+          Back to Homepage
+        </Link>
       </Typography>
     </>
   );

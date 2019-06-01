@@ -12,7 +12,10 @@ import useData from './components/useData';
 
 function App() {
   const [theme, toggleTheme] = useTheme();
-  const data = useData('https://restcountries.eu/rest/v2/all');
+  const [{ data, isLoading, isError }] = useData(
+    'https://restcountries.eu/rest/v2/all',
+    []
+  );
   const [regions, setRegions] = useState([]);
   const [currentRegion, setCurrentRegion] = useState('All');
 
@@ -43,6 +46,7 @@ function App() {
                 render={props => (
                   <CountriesList
                     {...props}
+                    isError={isError}
                     data={data}
                     regions={regions}
                     currentRegion={currentRegion}
@@ -56,6 +60,8 @@ function App() {
                 render={props => (
                   <CountryDetails
                     {...props}
+                    isLoading={isLoading}
+                    isError={isError}
                     details={data.find(
                       country => country.alpha3Code === props.match.params.code
                     )}
