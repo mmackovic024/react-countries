@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Container, CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import Navbar from './components/Navbar';
@@ -34,7 +34,7 @@ function App() {
   }, [data]);
 
   return (
-    <BrowserRouter basename="/react-countries">
+    <HashRouter basename="/">
       <MuiThemeProvider theme={theme === 'light' ? light : dark}>
         <CssBaseline>
           <Container style={{ paddingTop: '5.5rem' }}>
@@ -74,7 +74,7 @@ function App() {
           </Container>
         </CssBaseline>
       </MuiThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
